@@ -6,7 +6,7 @@
 //                                   //
 // **** STABILISATEUR DE CAMERA **** //
 //                                   //
-// ********* Version 0.1.2 ********* //
+// ********* Version 0.1.3 ********* //
 
 // Inclusion des librairies //
 #include <Wire.h> // Librairie pour le controle des ports analogiques
@@ -17,7 +17,7 @@ Servo interfaceMoteur ;  // Instance de Servo pour controler le moteur
 
 // Declaration des variables globales
 float u = 0; // Variable post-filtre passe bas
-float wo = 0.1; // Pulsation de coupure du filtre passe-bas (rad/s)
+float tempsCaracteristique = 0.1; // Pulsation de coupure du filtre passe-bas (rad/s)
 float pause = 20; // Temps de pause entre deux loop (ms)
 float gain = 0.01; // Gain de l'asservissement
 const int MPU_addr=0x68;  // Adresse I2C du MPU-6050
@@ -59,7 +59,7 @@ void loop()
   // ****************** //
 
   // Filtrage passe-bas de x par la methode d'Euler
-  u = u +(pause/1000)*(AcX/(100*wo) - u/wo);
+  u = u +(pause/1000)*(AcX/(100*tempsCaracteristique) - u/tempsCaracteristique);
 
   if(-1*(marge/2) < gain*u < (marge/2))
   {
